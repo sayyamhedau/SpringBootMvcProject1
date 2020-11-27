@@ -13,7 +13,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -42,10 +41,9 @@ public class EmployeeServiceImpl implements IEmployeeService, UserDetailsService
 		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 		Role roleList = roleRepository.findByRole("ADMIN");
 		employee.setRoles(new HashSet<>(Arrays.asList(roleList)));
-		
+
 		return employeeRepo.save(employee);
 	}
-	
 
 	@Override
 	public boolean employeeExistsOrNotByEmail(String email) {
@@ -60,10 +58,7 @@ public class EmployeeServiceImpl implements IEmployeeService, UserDetailsService
 	@Override
 	public Employee findEmployeeById(Long id) {
 		Optional<Employee> optionalEmployee = employeeRepo.findById(id);
-		if (!optionalEmployee.isPresent()) {
-			throw new EmployeeNotFoundException("Employee not found with ID - " + id);
-		}
-		return employeeRepo.findById(id).get();
+		return optionalEmployee.orElseThrow(() -> new EmployeeNotFoundException());
 	}
 
 	@Override
@@ -74,10 +69,7 @@ public class EmployeeServiceImpl implements IEmployeeService, UserDetailsService
 	@Override
 	public UserDetails loadUserByUsername(String username) {
 		Optional<Employee> optionalEmployee = employeeRepo.findByEmail(username);
-		if (!optionalEmployee.isPresent()) {
-			throw new UsernameNotFoundException("Invalid Username or Password");
-		}
-		Employee employee = optionalEmployee.get();
+		Employee employee = optionalEmployee.orElseThrow(() -> new EmployeeNotFoundException());
 		List<GrantedAuthority> authorities = getAuthority(employee.getRoles());
 		return new User(employee.getEmail(), employee.getPassword(), authorities);
 	}

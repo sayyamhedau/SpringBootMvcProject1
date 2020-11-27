@@ -67,7 +67,7 @@ public class EmployeeController {
 		Employee savedEmployee = employeeService.Save(employee);
 		attributes.addFlashAttribute("successMsg", savedEmployee.getFirstname() + " " + savedEmployee.getLastname()
 				+ ", Employee Registered Successfully!");
-		return "redirect:/employee/register";
+		return "redirect:/employee/register"; 
 	}
 
 	@GetMapping(value = "/update/{id}")
