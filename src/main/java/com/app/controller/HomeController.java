@@ -14,4 +14,9 @@ public class HomeController {
 	public String viewloginPage() {
 		return "LoginPage";
 	}
+
+	@GetMapping(value = "/error")
+	public String viewErrorPage() {
+		return "ErrorPage";
+	}
 }

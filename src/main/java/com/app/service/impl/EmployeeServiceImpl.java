@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +40,6 @@ public class EmployeeServiceImpl implements IEmployeeService, UserDetailsService
 		employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 		Role roleList = roleRepository.findByRole("ADMIN");
 		employee.setRoles(new HashSet<>(Arrays.asList(roleList)));
-
 		return employeeRepo.save(employee);
 	}
 
@@ -57,8 +55,7 @@ public class EmployeeServiceImpl implements IEmployeeService, UserDetailsService
 
 	@Override
 	public Employee findEmployeeById(Long id) {
-		Optional<Employee> optionalEmployee = employeeRepo.findById(id);
-		return optionalEmployee.orElseThrow(() -> new EmployeeNotFoundException());
+		return employeeRepo.findById(id).orElseThrow(EmployeeNotFoundException::new);
 	}
 
 	@Override
@@ -68,8 +65,7 @@ public class EmployeeServiceImpl implements IEmployeeService, UserDetailsService
 
 	@Override
 	public UserDetails loadUserByUsername(String username) {
-		Optional<Employee> optionalEmployee = employeeRepo.findByEmail(username);
-		Employee employee = optionalEmployee.orElseThrow(() -> new EmployeeNotFoundException());
+		Employee employee = employeeRepo.findByEmail(username).orElseThrow(EmployeeNotFoundException::new);
 		List<GrantedAuthority> authorities = getAuthority(employee.getRoles());
 		return new User(employee.getEmail(), employee.getPassword(), authorities);
 	}
