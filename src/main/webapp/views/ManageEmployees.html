@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>WebApp - Manage Employees</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div th:replace="DashboardSlidebar::slidebar"></div>
+		<div class="main_content">
+			<div th:replace="DashboardHeader::dashboardHeader1"></div>
+			<div class="info">
+				<div>
+					<div class="container">
+						<h2
+							style="margin-bottom: 2.4%; font-weight: bold; font-style: italic">Employees
+							List</h2>
+						<table class="table table-hover">
+							<thead>
+								<tr style="background-color: #ececec">
+									<th scope="row"><a th:href="@{'/admin/page/'+${currantPage}} + '?sortField=id&sortDir=' + ${reverseSortDir}">ID</a></th>
+									<th scope="row"><a th:href="@{'/admin/page/'+${currantPage}} + '?sortField=id&sortDir=' + ${reverseSortDir}">First Name</a></th>
+									<th scope="row"><a th:href="@{'/admin/page/'+${currantPage}} + '?sortField=id&sortDir=' + ${reverseSortDir}">Last Name</a></th>
+									<th scope="row"><a th:href="@{'/admin/page/'+${currantPage}} + '?sortField=id&sortDir=' + ${reverseSortDir}">Mobile No</a></th>
+									<th scope="row"><a th:href="@{'/admin/page/'+${currantPage}} + '?sortField=id&sortDir=' + ${reverseSortDir}">Email</a></th>
+									<th scope="row">Action</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="employee : ${employeeList}">
+									<td th:text="${employee.id}"></td>
+									<td th:text="${employee.firstname}"></td>
+									<td th:text="${employee.lastname}"></td>
+									<td th:text="${employee.mobileno}"></td>
+									<td th:text="${employee.email}"></td>
+									<td><a th:href="@{'/employee/update/'+${employee.id}}" class="btn btn-sm btn-success sm">Update</a>
+										&nbsp&nbsp&nbsp&nbsp&nbsp 
+										<a th:href="@{'/employee/delete/'+${employee.id}}" onclick="if(!confirm('Are you sure to delete this product?')) return false" class="btn btn-sm btn-danger">Delete</a></td>
+								</tr>
+							</tbody>
+						</table>
+
+						<div>
+							<nav aria-label="...">
+								Page [[${currantPage}]] of [[${totalPages}]]
+							</nav>
+						
+							<nav aria-label="Page navigation example">
+								<ul class="pagination justify-content-end">
+									<li class="page-item">
+										<a class="page-link" th:if="${currantPage > 1}" th:href="@{'/admin/page/'+${(totalPages - totalPages)+1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}" tabindex="-1">First</a>
+										<a class="page-link" th:unless="${currantPage > 1}" tabindex="-1">First</a>
+									</li>
+									
+									<li class="page-item">
+										<a class="page-link" th:if="${currantPage > 1}" th:href="@{'/admin/page/'+${currantPage-1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}" tabindex="-1">Previous</a>
+										<a class="page-link" th:unless="${currantPage > 1}" tabindex="-1">Previous</a>
+									</li>
+									
+									<span th:each="i : ${#numbers.sequence(1, totalPages)}">
+										<a class="page-link" th:if="${i != currantPage}" th:href="@{'/admin/page/'+${i}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">[[${i}]]</a></li>
+										<li th:unless="${i != currantPage}"><a class="page-link">[[${i}]]</a></li>
+									</span>
+									
+									<li class="page-item">
+										<a class="page-link" th:if="${currantPage < totalPages}" th:href="@{'/admin/page/'+${currantPage+1}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">Next</a>
+										<a class="page-link" th:unless="${currantPage < totalPages}">Next</a>
+									</li>
+									
+									<li class="page-item">
+										<a class="page-link" th:if="${currantPage < totalPages}" th:href="@{'/admin/page/'+${totalPages}+'?sortField='+${sortField}+'&sortDir='+${sortDir}}">Last</a>
+										<a class="page-link" th:unless="${currantPage < totalPages}">Last</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						
+							<div th:if="${param.deleted}">
+     							<div class="alert alert-info"><strong>Employee Deleted Successfully with Id - [[${param.id}]]</strong></div>
+						    </div>
+						    <div th:if="${errorMsg != null}">
+     							<div class="alert alert-info"><strong>[[${errorMsg}]]</strong></div>
+						  </div>
+					</div>
+				</div>
+			</div>
+			<!--end of info-->
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+			console.log('Page loaded');
+		})
+	</script>
+
+</body>
+</html>

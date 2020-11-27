@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+</head>
+<body>
+	<div class="header" th:fragment="dashboardHeader1">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand h1" href="#">ECommerce Online</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Services</a>
+                            </li>
+                            <li class="nav-item active">
+                            	<i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                <a class="nav-link" href="#">Countact Us</a>
+                            </li>
+                        </ul>
+                        
+                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                       <ul>
+	                      <a sec:authorize="!isAuthenticated()" class="nav-link btn btn-outline-primary" th:href="@{/login}"> &nbsp; Login</a>
+	                	  <li sec:authorize="isAuthenticated()"><a class="nav-link btn btn-outline-primary" th:href="@{/logout?logout}">Logout</a></li>
+                	  </ul>
+                    </div>
+                </nav>
+            </div>
+</body>
+</html>

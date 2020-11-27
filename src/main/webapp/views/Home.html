@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Employee- Home</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+</head>
+<body>
+		<div class="wrapper">
+		<div class="main_content">
+			<div th:include="Header::homeheader1"></div>
+
+			<!-- Jumbotron -->
+			<div class="jumbotron text-center blue-grey lighten-5">
+				<!-- Title -->
+				<h2 class="card-title h2">Inventory Management Portal</h2>
+
+				<!-- Subtitle -->
+				<p class="indigo-text my-4 font-weight-bold">SIMPLIFY YOUR INVENTORY MANAGEMENT, WAREHOUSING AND LOGISTICS OPERATIONS.</p>
+				<hr class="my-2">
+
+				<a class="btn btn-outline-dark btn-rounded">Login</a> 
+				<a href="./customerSignup" class="btn btn-outline-dark btn-rounded">More</a>
+			</div>
+			<!-- Jumbotron -->
+			
+		</div>
+		<div class="info">
+			<div>
+				<div class="container"></div>
+			</div>
+		</div>
+		<!--end of info-->
+	</div>
+</body>
+</html>

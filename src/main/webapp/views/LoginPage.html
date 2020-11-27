@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>WebApp - Login</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<script type="text/javascript" th:src="@{/js/jquery-3.5.1.js}"></script>
+</head>
+<body style="background-color: #666363">
+	<div th:replace="Header::homeheader1">
+	
+	</div>
+
+	<div class="container col-md-6" style="margin-top: 4%">
+		<div class="card"
+			style="border: 0px solid transparent; box-shadow: 0 5px 16px 0 rgba(48, 44, 44, 0.6)">
+			<div class="card-header bg-primary text-white"
+				style="font-weight: bolder; font-size: 17px">Login</div>
+			<div class="card-body">
+				<form th:action="@{/login}" method="post">
+					<div class="form-group">
+						<label for="emailLabel">Email address</label> <input type="text"
+							class="form-control" id="username" name="username"
+							value="divyankatripathi@gmail.com" aria-describedby="emailHelp"
+							placeholder="Enter email" required>
+					</div>
+					<div class="form-group">
+						<label for="passwordLabel">Password</label> <input type="password"
+							class="form-control" id="password" name="password" value="1234"
+							placeholder="Password" required>
+					</div>
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="exampleCheck">
+						<label class="form-check-label" for="exampleCheck">Remember me</label>
+					</div>
+					<br>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">Login</button>
+						<a class="btn btn-outline-primary" th:href="@{/}">Back</a>
+					</div>
+					<div class="form-group">
+						<span>New user? <a href="/" th:href="@{/employee/register}">Register here</a></span>
+					</div>
+				</form>
+			</div>
+			<div class="card-footer">
+				<div th:if="${alertMsg != null}" class="alert alert-danger"
+					role="alert">
+					<strong>${alertMsg}</strong>
+				</div>
+
+				<div th:if="${param.loginfail}" class="alert alert-danger">*Invalid username or password.</div>
+
+				<div th:if="${param.logout}" class="alert alert-info">*You have been logged out.</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function() {
+				$(this).remove();
+			});
+		}, 4000);
+	</script>
+</body>
+</html>

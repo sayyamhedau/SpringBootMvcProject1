@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Employee - Register</title>
+<link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+<script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+<style type="text/css">
+	.invalid-feedback{
+		font-size: 13px;
+		color: red;
+	}
+	
+	div span{
+		font-size: 13px;
+		color: red;
+	}
+</style>
+</head>
+<body style="background-color:#666363">
+	<div class="wrapper">
+		<div class="main_content">
+			<div th:include="Header::homeheader1"></div>
+		</div>
+
+		<div class="info">
+			<div>
+				<div class="container col-md-10 col-sm-10 col-lg-6">
+					<div class="card" style="margin-top: 2%; border: 0px solid transparent;box-shadow: 0 5px 16px 0 rgba(48, 44, 44, 0.6)">
+						<div class="card-header bg-primary text-white text-center" style="font-weight: bolder;">EMPLOYEE REGISTRATION</div>
+						<div class="card-body">
+							<form th:action="@{/employee/register}" method="POST" th:object=${employee}>
+								<div class="form-row py-1">
+									<label>First Name</label> 
+									<input type="text"
+										class="form-control" id="firstname" name="firstname" placeholder="Enter First name" th:value="*{firstname}" th:errorClass="is-invalid">
+										<div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="invalid-feedback"></div>
+										<span id="firstnameerr" style="color:red"></span>
+								</div>
+								
+								<div class="form-row py-1">
+									<label>Last Name</label> 
+									<input type="text" class="form-control" id="lastname" name="lastname"
+										placeholder="Enter last name" th:field="*{lastname}" th:errorClass="is-invalid" required>
+									<div th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="invalid-feedback"></div>
+									<span id="lastnameerr" style="color:red"></span>
+								</div>
+
+								<div class="form-row py-1">
+									<label for="emailLabel">Email address</label> <input
+										type="email" class="form-control" id="email" name="email" th:errorClass="is-invalid"
+										th:field="*{email}" placeholder="Enter email" required>
+									<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="invalid-feedback"></div>
+									<span id="emailerr" style="color:red"></span>
+								</div>
+
+								<div class="form-row py-1">
+									<label for="mobilenoLabel">Mobile No</label> <input type="text"
+										class="form-control" id="mobileno" name="mobileno" th:errorClass="is-invalid"
+										th:field="*{mobileno}" placeholder="Enter mobileno" required>
+									<div th:if="${#fields.hasErrors('mobileno')}" th:errors="*{mobileno}" class="invalid-feedback"></div>
+									<span id="mobilenoerr"></span>
+								</div>
+									
+								<div class="form-row py-1">
+									<label for="passwordLabel">Password</label> 
+									<input type="password" class="form-control" id="password" name="password" th:errorClass="is-invalid"
+										th:field="*{password}" placeholder="Enter password" required>
+									<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+								</div>
+								
+								<div class="form-row py-1">
+									<label for="repeatPasswordLabel">Re-Password</label> 
+									<input type="password" class="form-control" id="repeatPassword" name="repeatPassword" th:errorClass="is-invalid"
+										th:field="*{repeatPassword}" placeholder="Enter re-Password" required>
+									<div th:if="${#fields.hasErrors('repeatPassword')}" th:errors="*{repeatPassword}" class="invalid-feedback"></div>
+									<span id="repeatPassworderr"></span>
+								</div>
+								
+								<div class="modal-footer">
+									<button type="submit" id="register" class="btn btn-primary">Register</button>
+									<button type="reset" class="btn btn-secondary">Reset</button>
+									<a href="/" class="btn btn-secondary text-white">Back</a>
+								</div>
+							</form>
+						</div>
+							
+						<div class="card-footer" th:if="${successMsg != null}">
+							<div class="alert alert-success" role="alert">
+								<strong th:text="${successMsg}"></strong>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--end of info-->
+	</div>
+	
+	<script type="text/javascript">
+		window.setTimeout(function() {
+			$(".alert").fadeTo(500, 0).slideUp(500, function() {
+				$(this).remove();
+				$(".card-footer").hide();
+			});
+		}, 8000);
+		
+		$(document).ready(function(){
+			$("#email").blur(function(){
+				let email = $("#email").val();
+				$.ajax({
+					url : "/employee/validateEmail",
+					method : 'GET',
+					data : {
+						email : email
+					},
+					success : function(data){
+						console.log(data);
+						if(data == "Duplicate"){
+							$("#emailerr").text("*Email Already Exists, Try with another email");
+							$("#register").prop("disabled", true);
+						}else if(data == "Unique"){
+							$("#register").prop("disabled", false);
+							$("#emailerr").html("");
+						}
+					},
+					error : function(data){
+						console.log(data);
+					}
+				})
+			});
+			
+			$("#mobileno").blur(function(){
+				let mobileno = $("#mobileno").val();
+				$.ajax({
+					url : "/employee/validateMobileno",
+					method : 'GET',
+					data : {
+						mobileno : mobileno
+					},
+					success : function(data){
+						if(data == "Duplicate"){
+							$("#mobilenoerr").text("*Mobileno Already Exists, Try with another mobileno");
+							$("#register").prop("disabled", true);
+						}else{
+							$("#register").prop("disabled", false);
+							$("#mobilenoerr").html("");
+						}
+					},
+					error : function(data){
+						console.log(data);
+					}
+				})
+			})
+			
+			$("#repeatPassword").keyup(function(){
+				let repeatPassword = $("#repeatPassword").val();
+				let password = $("#password").val();
+				
+				if(repeatPassword != password){
+					$("#repeatPassworderr").text("*Password & Re-Password should be same");
+					$("#register").prop("disabled", true);
+				}else{
+					$("#repeatPassworderr").text("");
+					$("#register").prop("disabled", false);
+				}
+			})
+			
+			$("#firstname").blur(function(){
+				if($(this).val().match('^[A-Z a-z]+$')){
+					$("#register").prop("disabled", false);
+					$("#firstnameerr").text("");
+				}else{
+					$("#register").prop("disabled", true);
+					$("#firstnameerr").text("Invalid firstname");
+				}
+			})
+			
+			$("#lastname").blur(function(){
+				if($(this).val().match('^[A-Z a-z]+$')){
+					$("#register").prop("disabled", false);
+					$("#lastnameerr").text("");
+				}else{
+					$("#register").prop("disabled", true);
+					$("#lastnameerr").text("*Invalid lastname");
+				}
+			})
+		});
+	</script>
+</body>
+</html>

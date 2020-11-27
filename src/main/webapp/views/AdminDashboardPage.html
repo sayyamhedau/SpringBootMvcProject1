@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>WebApp - Dashboard</title>
+<link rel="stylesheet" type="text/css"
+	th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+<script type="text/javascript" src="/js/jquery-3.5.1.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div th:replace="DashboardSlidebar::slidebar"></div>
+		<div class="main_content">
+			<div th:replace="DashboardHeader::dashboardHeader1"></div>
+			<div class="info">
+				<div>
+					<div class="container">
+						<h2
+							style="margin-bottom: 2.4%; font-weight: bold; font-style: italic">Hello,
+							Admin</h2>
+
+						<div class="container">
+							<p>
+								Welcome <span sec:authentication="principal.username">User</span>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end of info-->
+		</div>
+	</div>
+
+</body>
+</html>
